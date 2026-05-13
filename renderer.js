@@ -1,28 +1,24 @@
 const supabase = require("./supabase");
-
-const displayNote =
-  document.getElementById("displayNote");
-
-const noteInput =
-  document.getElementById("noteInput");
-
-const saveBtn =
-  document.getElementById("saveBtn");
+const displayNote = document.getElementById("displayNote");
+const noteInput = document.getElementById("noteInput");
+const saveBtn = document.getElementById("saveBtn");
+const clickSound = new Audio("pop_sound.mp3");
+const petClickSound = new Audio("meow.mp3");
 
 
-// IMPORTANT:
 // CHANGE THIS ON EACH PERSON'S APP
 const MY_ID = "min";
-
-// WHOSE NOTE SHOULD DISPLAY?
 const PARTNER_ID = "diana";
 
-
+const pet = document.getElementById("pet");
+pet.addEventListener("click", () => {
+  petClickSound.currentTime = 0;
+  petClickSound.play();
+});
 
 async function updateNote() {
 
   const content = noteInput.value;
-
   await supabase
     .from("notes")
     .upsert({
@@ -31,8 +27,8 @@ async function updateNote() {
     });
 
   noteInput.value = "";
+  clickSound.play();
 }
-
 
 
 async function loadPartnerNote() {
@@ -44,12 +40,16 @@ async function loadPartnerNote() {
     .single();
 
   if (data) {
-    displayNote.textContent =
-      data.content;
+displayNote.innerHTML = `
+  <div>
+    <div>${data.content}</div>
+    <small>
+      ${new Date().toLocaleTimeString()}
+    </small>
+  </div>
+`;
   }
 }
-
-
 
 saveBtn.addEventListener(
   "click",

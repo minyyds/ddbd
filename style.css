@@ -5,14 +5,16 @@
 
 body {
     margin: 0;
-    background: #1e1e2e;
+    border-radius: 20px;
+    background: #1b1b1b;
     color: white;
     font-family: "PixelifySans";
+    overflow: hidden;
 }
 
 .header {
     height: 32px;
-    background: #313244;
+    background: #3e3e41;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -26,11 +28,15 @@ body {
     flex-direction: column;
     gap: 12px;
     font-family: "PixelifySans";
+    margin: 8px;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
 }
 
 #displayNote {
     height: 80px;
-    background: #313244;
+    background: #3e3e41;
     border-radius: 12px;
     padding: 12px;
     font-size: 18px;
@@ -43,12 +49,12 @@ body {
 
 textarea {
     resize: none;
-    height: 60px;
+    height: 30px;
     border: none;
     outline: none;
     border-radius: 12px;
     padding: 10px;
-    background: #45475a;
+    background: #3e3e41;
     color: white;
     -webkit-app-region: no-drag;
     font-family: "PixelifySans";
@@ -58,15 +64,57 @@ button {
     border: none;
     padding: 10px;
     border-radius: 12px;
-    background: #f38ba5;
+    background: #587c33;
     color: white;
     cursor: pointer;
     -webkit-app-region: no-drag;
     font-family: "PixelifySans";
+}
 
+#noteBox {
+    position: relative;
+    height: 80px;
+    background: #3e3e41;
+    border-radius: 12px;
+    padding: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
 
+#pet {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    width: 50px;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+    transition: transform 0.1s ease;
 }
 
 ::placeholder {
     font-family: "PixelifySans";
+}
+
+/* animations */
+
+#displayNote {
+    transition: all 0.25s ease;
+}
+
+button:hover {
+    transform: scale(1.03);
+}
+
+button {
+    transition: all 0.2s ease;
+}
+
+#pet:hover {
+    transform: scale(1.1);
+}
+
+#pet:active {
+    transform: scale(0.9);
 }
