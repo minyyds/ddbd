@@ -1,15 +1,23 @@
-const { app, BrowserWindow } = require("electron");
-const Store = require("electron-store");
-const { Tray, Menu } = require("electron");
+const {
+  app,
+  BrowserWindow,
+  Tray,
+  Menu
+} = require("electron");
 
 const path = require("path");
+
+const Store = require("electron-store");
+
 const store = new Store();
 
-let tray;
 let win;
+let tray;
+
+
 
 function createWindow() {
-  
+
   const savedBounds =
     store.get("windowBounds");
 
@@ -23,11 +31,12 @@ function createWindow() {
 
     frame: false,
     resizable: false,
+
     transparent: true,
+
     backgroundColor: "#00000000",
+
     alwaysOnTop: true,
-    resizable: true,
-    icon: "desktop_icon.ico",
 
     webPreferences: {
       nodeIntegration: true,
@@ -37,21 +46,11 @@ function createWindow() {
 
   win.loadFile("index.html");
 
-const contextMenu =
-  Menu.buildFromTemplate([
-    {
-      label: "Quit",
-      click: () => app.quit(),
-    },
-  ]);
-
-tray.setToolTip("pixel love ♡");
-
-tray.setContextMenu(contextMenu);
 
   win.on("moved", () => {
 
-    const bounds = win.getBounds();
+    const bounds =
+      win.getBounds();
 
     store.set(
       "windowBounds",
@@ -59,7 +58,53 @@ tray.setContextMenu(contextMenu);
     );
 
   });
+
+
+  win.on("close", (event) => {
+
+    event.preventDefault();
+
+    win.hide();
+
+  });
+
 }
+
+
+
+function createTray() {
+
+  const iconPath =
+    path.join(__dirname, "icon.png");
+
+  tray = new Tray(iconPath);
+
+  const contextMenu =
+    Menu.buildFromTemplate([
+      {
+        label: "Quit",
+        click: () => app.quit(),
+      },
+    ]);
+
+  tray.setToolTip("pixel love ♡");
+
+  tray.setContextMenu(contextMenu);
+
+
+  tray.on("click", () => {
+
+    if (win.isVisible()) {
+      win.hide();
+    } else {
+      win.show();
+    }
+
+  });
+
+}
+
+
 
 app.whenReady().then(() => {
 
@@ -68,4 +113,7 @@ app.whenReady().then(() => {
   });
 
   createWindow();
+
+  createTray();
+
 });

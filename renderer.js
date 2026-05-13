@@ -4,6 +4,10 @@ const noteInput = document.getElementById("noteInput");
 const saveBtn = document.getElementById("saveBtn");
 const clickSound = new Audio("pop_sound.mp3");
 const petClickSound = new Audio("meow.mp3");
+const receiveSound = new Audio("receive.mp3");
+
+  receiveSound.volume = 0.6;
+  let lastReceiveTime = 0;
 
 
 // CHANGE THIS ON EACH PERSON'S APP
@@ -28,8 +32,11 @@ async function updateNote() {
 
   noteInput.value = "";
   clickSound.play();
-}
 
+  displayNote.classList.remove("note-pop");
+  void displayNote.offsetWidth;
+  displayNote.classList.add("note-pop");
+}
 
 async function loadPartnerNote() {
 
@@ -56,8 +63,6 @@ saveBtn.addEventListener(
   updateNote
 );
 
-
-
 supabase
   .channel("notes-live")
   .on(
@@ -69,17 +74,27 @@ supabase
     },
     (payload) => {
 
-      if (
-        payload.new.user_id === PARTNER_ID
-      ) {
-        displayNote.textContent =
-          payload.new.content;
-      }
+      const newData = payload.new;
 
+      if (newData.user_id === PARTNER_ID) {
+
+        displayNote.innerHTML = `
+          <div>
+            <div>${newData.content}</div>
+            <small>${new Date().toLocaleTimeString()}</small>
+          </div>
+        `;
+
+        const now = Date.now();
+
+      if (now - lastReceiveTime > 1000) {
+          receiveSound.currentTime = 0;
+          receiveSound.play();
+          lastReceiveTime = now;
+          }
+      }
     }
   )
   .subscribe();
-
-
 
 loadPartnerNote();

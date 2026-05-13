@@ -1,22 +1,25 @@
 {
   "name": "ddbd",
   "version": "1.0.0",
-  "description": "",
+  "description": "desktop note sharing app",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
     "build": "electron-builder"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "commonjs",
   "dependencies": {
-    "@supabase/supabase-js": "^2.105.4",
-    "electron": "^42.0.1",
-    "electron-store": "^8.2.0"
-  },
+  "@supabase/supabase-js": "^latest",
+  "electron-store": "^latest"
+},
   "devDependencies": {
-    "electron-builder": "^26.8.1"
+    "electron": "^latest"
+  },
+  "build": {
+    "appId": "com.ddbd",
+    "productName": "NoteShare",
+    "win": {
+      "target": "nsis",
+      "icon": "icon.ico"
+    }
   }
 }

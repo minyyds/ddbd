@@ -64,7 +64,7 @@ button {
     border: none;
     padding: 10px;
     border-radius: 12px;
-    background: #587c33;
+    background: rgb(88, 124, 51);
     color: white;
     cursor: pointer;
     -webkit-app-region: no-drag;
@@ -105,6 +105,7 @@ button {
 
 button:hover {
     transform: scale(1.03);
+    box-shadow: 0 0 12px rgba(88, 124, 51, 0.6);
 }
 
 button {
@@ -117,4 +118,21 @@ button {
 
 #pet:active {
     transform: scale(0.9);
+}
+
+.note-pop {
+    animation: popIn 0.3s ease;
+}
+
+@keyframes popIn {
+
+    0% {
+        transform: scale(0.95);
+        opacity: 0.6;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
 }
