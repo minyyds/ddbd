@@ -148,6 +148,7 @@ button {
 }
 
 #spotify,
+#mySpotify,
 #partnerSpotify {
     font-family: "PixelifySans";
     font-size: 12px;
@@ -251,7 +252,7 @@ button {
    ===================== */
 #typingIndicator {
     font-size: 11px;
-    color: #f0c040;
+    color: #9ee2e7;
     text-align: center;
     margin-top: -6px;
     animation: pulse 0.8s infinite alternate;

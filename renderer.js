@@ -308,7 +308,8 @@ async function updateSpotify() {
     const artwork = data.item.album.images[0]?.url ?? "";
 
     // Show your own song as plain text
-    partnerSpotify.innerText = `you: ♫ ${song} - ${artist}`;
+document.getElementById("mySpotify").innerText = `you: ♫ ${song} - ${artist}`;
+
 
     // Push to Supabase including artwork so partner can show the card
     supabase.from("spotify_status").upsert({
