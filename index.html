@@ -8,27 +8,63 @@
 </head>
 
 <body>
-<div class="header">
-     -.♡ check on me!
-</div>
 
-<div class="container">
-<div id="noteBox">
-    <img id="pet" src="caticon.gif"/>
-    <div id="displayNote">
-        waiting for note...
+    <div class="window">
+
+        <div class="header">
+            -.♡ check on me!
+        </div>
+
+        <div class="container">
+            <div class="time-bar">
+                <div class="time-slot">
+                    <span class="status-dot" id="myStatusDot"></span>
+                    <div id="myTime">--</div>
+                </div>
+                <div class="heart">♡</div>
+                <div class="time-slot">
+                    <div id="partnerTime">--</div>
+                    <span class="status-dot" id="partnerStatusDot"></span>
+                </div>
+            </div>
+
+            <div id="noteBox">
+                <img id="pet" src="caticon.gif" />
+                <div id="displayNote">
+                    waiting for note...
+                </div>
+            </div>
+
+            <div id="typingIndicator" class="hidden">diana is typing...</div>
+
+            <textarea id="noteInput" placeholder="write something cute..."></textarea>
+
+            <button id="saveBtn">
+                ➤&nbsp;&nbsp;send
+            </button>
+
+            <button id="spotifyLogin">
+                connect spotify
+            </button>
+
+            <div id="partnerSpotify">diana is not listening...</div>
+
+            <div id="spotifyCard" class="hidden">
+                <img id="spotifyArtwork" src="" alt="artwork" />
+                <div id="spotifyInfo">
+                    <div id="spotifySong">—</div>
+                    <div id="spotifyArtist">—</div>
+                    <div id="spotifyProgressBar">
+                        <div id="spotifyProgressFill"></div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
     </div>
-</div>
 
-    <textarea id="noteInput" placeholder="write something cute..."></textarea>
-
-    <button id="saveBtn">
-        update ♡
-    </button>
-
-</div>
-
-<script src="renderer.js"></script>
+    <script src="renderer.js"></script>
 
 </body>
 

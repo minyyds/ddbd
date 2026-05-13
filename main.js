@@ -1,119 +1,123 @@
 const {
-  app,
-  BrowserWindow,
-  Tray,
-  Menu
+    app,
+    BrowserWindow,
+    Tray,
+    Menu,
+    protocol,
 } = require("electron");
 
-const path = require("path");
-
-const Store = require("electron-store");
-
+const path  = require("path");
+const Store = require("electron-store").default;
 const store = new Store();
 
 let win;
-let tray;
+let tray = null;
 
-
-
-function createWindow() {
-
-  const savedBounds =
-    store.get("windowBounds");
-
-  win = new BrowserWindow({
-
-    width: 340,
-    height: 300,
-
-    x: savedBounds?.x,
-    y: savedBounds?.y,
-
-    frame: false,
-    resizable: false,
-
-    transparent: true,
-
-    backgroundColor: "#00000000",
-
-    alwaysOnTop: true,
-
-    webPreferences: {
-      nodeIntegration: true,
-      contextIsolation: false,
-    },
-  });
-
-  win.loadFile("index.html");
-
-
-  win.on("moved", () => {
-
-    const bounds =
-      win.getBounds();
-
-    store.set(
-      "windowBounds",
-      bounds
-    );
-
-  });
-
-
-  win.on("close", (event) => {
-
-    event.preventDefault();
-
-    win.hide();
-
-  });
-
+// =====================
+// SINGLE INSTANCE LOCK
+// =====================
+const gotLock = app.requestSingleInstanceLock();
+if (!gotLock) {
+    app.quit();
 }
 
-
-
-function createTray() {
-
-  const iconPath =
-    path.join(__dirname, "icon.png");
-
-  tray = new Tray(iconPath);
-
-  const contextMenu =
-    Menu.buildFromTemplate([
-      {
-        label: "Quit",
-        click: () => app.quit(),
-      },
-    ]);
-
-  tray.setToolTip("pixel love ♡");
-
-  tray.setContextMenu(contextMenu);
-
-
-  tray.on("click", () => {
-
-    if (win.isVisible()) {
-      win.hide();
-    } else {
-      win.show();
+// =====================
+// PROTOCOL (Spotify callback)
+// =====================
+if (process.defaultApp) {
+    if (process.argv.length >= 2) {
+        app.setAsDefaultProtocolClient("myapp", process.execPath, [path.resolve(process.argv[1])]);
     }
-
-  });
-
+} else {
+    app.setAsDefaultProtocolClient("myapp");
 }
 
+function handleCallback(url) {
+    const parsed = new URL(url);
+    const code   = parsed.searchParams.get("code");
+    if (code && win) {
+        win.webContents.send("spotify-code", code);
+    }
+}
 
+// Windows: second instance carries the URL in argv
+app.on("second-instance", (event, commandLine) => {
+    const url = commandLine.find(arg => arg.startsWith("myapp://"));
+    if (url) handleCallback(url);
+    if (win) { win.show(); win.focus(); }
+});
 
+// Mac: open-url event
+app.on("open-url", (event, url) => {
+    event.preventDefault();
+    handleCallback(url);
+});
+
+// =====================
+// WINDOW
+// =====================
+function createWindow() {
+    const savedBounds = store.get("windowBounds");
+
+    win = new BrowserWindow({
+        width:  340,
+        height: 500,
+        x: savedBounds?.x,
+        y: savedBounds?.y,
+        frame:           false,
+        resizable:       false,
+        transparent:     true,
+        backgroundColor: "#00000000",
+        alwaysOnTop:     true,
+        icon: path.join(__dirname, "icon.ico"),
+        webPreferences: {
+            nodeIntegration:  true,
+            contextIsolation: false,
+        },
+    });
+
+    win.loadFile("index.html");
+
+    win.on("moved", () => {
+        store.set("windowBounds", win.getBounds());
+    });
+
+    win.on("close", (event) => {
+        event.preventDefault();
+        win.hide();
+    });
+}
+
+// =====================
+// TRAY
+// =====================
+function createTray() {
+    try {
+        const iconPath = app.isPackaged
+            ? path.join(process.resourcesPath, "./icon.ico")
+            : path.join(__dirname, "./icon.ico");
+
+        tray = new Tray(iconPath);
+
+        tray.setToolTip("♡");
+        tray.setContextMenu(Menu.buildFromTemplate([
+            { label: "Quit", click: () => app.quit() },
+        ]));
+
+        tray.on("click", () => {
+            win.isVisible() ? win.hide() : win.show();
+        });
+
+    } catch (err) {
+        console.error("Tray creation failed:", err);
+    }
+}
+
+// =====================
+// INIT
+// =====================
 app.whenReady().then(() => {
-
-  app.setLoginItemSettings({
-    openAtLogin: true,
-  });
-
-  createWindow();
-
-  createTray();
-
+    app.setLoginItemSettings({ openAtLogin: true });
+    createWindow();
+    createTray();
 });

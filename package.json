@@ -8,11 +8,11 @@
     "build": "electron-builder"
   },
   "dependencies": {
-  "@supabase/supabase-js": "^latest",
-  "electron-store": "^latest"
+  "@supabase/supabase-js": "latest",
+  "electron-store": "latest"
 },
   "devDependencies": {
-    "electron": "^latest"
+    "electron": "latest"
   },
   "build": {
     "appId": "com.ddbd",
