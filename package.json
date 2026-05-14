@@ -8,18 +8,28 @@
     "build": "electron-builder"
   },
   "dependencies": {
-  "@supabase/supabase-js": "latest",
-  "electron-store": "latest"
-},
-  "devDependencies": {
-    "electron": "latest"
+    "@supabase/supabase-js": "latest",
+    "electron-store": "latest"
   },
-  "build": {
+  "devDependencies": {
+    "electron": "latest",
+    "electron-builder": "^26.8.1"
+  },
+"build": {
     "appId": "com.ddbd",
     "productName": "NoteShare",
     "win": {
       "target": "nsis",
       "icon": "icon.ico"
-    }
+    },
+    "extraResources": [
+      "*.mp3",
+      "*.gif",
+      "*.ttf",
+      "*.ico"
+    ],
+    "files": [
+      "**/*"
+    ]
   }
 }

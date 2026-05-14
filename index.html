@@ -1,71 +1,70 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
+  <head>
+    <link rel="stylesheet" href="style.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  </head>
 
-<head>
-    <link rel="stylesheet" href="style.css">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-</head>
-
-<body>
-
+  <body>
     <div class="window">
+      <div class="header">-.♡ check on me!</div>
+      <canvas id="bgCanvas"></canvas>
 
-        <div class="header">
-            -.♡ check on me!
+      <div class="container">
+        <div class="time-bar">
+          <div class="time-slot">
+            <span class="status-dot" id="myStatusDot"></span>
+            <div id="myTime">--</div>
+          </div>
+          <div class="heart">♡</div>
+          <div class="time-slot">
+            <div id="partnerTime">--</div>
+            <span class="status-dot" id="partnerStatusDot"></span>
+          </div>
         </div>
 
-        <div class="container">
-            <div class="time-bar">
-                <div class="time-slot">
-                    <span class="status-dot" id="myStatusDot"></span>
-                    <div id="myTime">--</div>
-                </div>
-                <div class="heart">♡</div>
-                <div class="time-slot">
-                    <div id="partnerTime">--</div>
-                    <span class="status-dot" id="partnerStatusDot"></span>
-                </div>
-            </div>
-
-            <div id="noteBox">
-                <img id="pet" src="caticon.gif" />
-                <div id="displayNote">
-                    waiting for note...
-                </div>
-            </div>
-
-            <div id="typingIndicator" class="hidden">diana is typing...</div>
-
-            <textarea id="noteInput" placeholder="write something cute..."></textarea>
-
-            <button id="saveBtn">
-                ➤&nbsp;&nbsp;send
-            </button>
-
-            <button id="spotifyLogin">
-                connect spotify
-            </button>
-            <div id="partnerSpotify">waiting for diana...</div>
-            <div id="mySpotify"></div>
-
-            <div id="spotifyCard" class="hidden">
-                <img id="spotifyArtwork" src="" alt="artwork" />
-                <div id="spotifyInfo">
-                    <div id="spotifySong">—</div>
-                    <div id="spotifyArtist">—</div>
-                    <div id="spotifyProgressBar">
-                        <div id="spotifyProgressFill"></div>
-                    </div>
-                </div>
-            </div>
-
+        <div id="noteBox">
+          <canvas id="heartsCanvas"></canvas>
+          <img id="pet" src="" />
+          <div id="displayNote">waiting for note...</div>
         </div>
 
+        <div id="typingIndicator" class="hidden"></div>
+
+        <textarea
+          id="noteInput"
+          placeholder="write something cute..."
+        ></textarea>
+
+        <button id="saveBtn">➤&nbsp;&nbsp;send</button>
+
+        <button id="spotifyLogin">connect spotify</button>
+        <div id="spotifyCard" class="hidden">
+          <div id="spotifyListeningText"></div>
+          <div id="spotifyCardInner">
+            <img id="spotifyArtwork" src="" alt="artwork" />
+            <div id="spotifyInfo">
+              <div id="spotifySong">—</div>
+              <div id="spotifyMeta">
+                <div id="spotifyArtist">—</div>
+                <div id="spotifyTimestamp">0:00 / 0:00</div>
+              </div>
+              <div id="spotifyProgressBar">
+                <div id="spotifyProgressFill"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="partnerSpotify"></div>
+        <div id="mySpotify"></div>
+      </div>
     </div>
 
     <script src="renderer.js"></script>
-
-</body>
-
+  </body>
 </html>
+
+<!-- nelly preorders 100£
+louisa 5% royalties on every sale -->

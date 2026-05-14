@@ -1,176 +1,236 @@
-@font-face {
-    font-family: "PixelifySans";
-    src: url(PixelifySans-VariableFont_wght.ttf)
-}
-
 .container,
 .header,
 #noteBox {
-    background: transparent;
+  background: transparent;
 }
 
 body {
-    margin: 0;
-    border-radius: 20px;
-    background: transparent;
-    color: white;
-    font-family: "PixelifySans";
-    overflow: hidden;
+  margin: 0;
+  border-radius: 20px;
+  background: transparent;
+  color: white;
+  font-family: "PixelifySans";
+  overflow: hidden;
 }
 
 .header {
-    height: 32px;
-    background: #3e3e41;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 14px;
-    -webkit-app-region: drag;
+  height: 32px;
+  background: #3e3e41;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  -webkit-app-region: drag
 }
 
 .container {
-    padding: 12px;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    font-family: "PixelifySans";
-    margin: 8px;
-    border-radius: 20px;
-    display: flex;
-    flex: 1;
-    overflow-y: auto;
-    min-height: 0;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  font-family: "PixelifySans";
+  margin: 8px;
+  border-radius: 20px;
+  display: flex;
+  flex: 1;
+  overflow-y: auto;
+  min-height: 0;
 }
 
 .time-bar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 6px 10px;
-    font-size: 12px;
-    font-family: "PixelifySans";
-    color: #aaa;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 10px;
+  font-size: 12px;
+  font-family: "PixelifySans";
+  color: #aaa;
 }
 
 .heart {
-    flex-shrink: 0;
-    margin: 0 6px;
-    color: #aaa;
-    font-size: 12px;
-    line-height: 1;
-    cursor: default;
-    user-select: none;
-    display: inline-block;
+  flex-shrink: 0;
+  margin: 0 6px;
+  color: #aaa;
+  font-size: 12px;
+  line-height: 1;
+  cursor: default;
+  user-select: none;
+  display: inline-block;
 }
 
 .window {
-    width: 100%;
-    height: 100%;
-    background: #1b1b1b;
-    border-radius: 8px;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
+  width: 100%;
+  height: 100%;
+  background: #1b1b1b;
+  border-radius: 8px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 #displayNote {
-    height: 80px;
-    background: #3e3e41;
-    border-radius: 12px;
-    padding: 12px;
+    width: 100%;
+    min-height: 56px;
+    background: transparent;
+    border-radius: 0;
+    padding: 0;
     font-size: 18px;
     display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
+    align-items: stretch;
+    justify-content: flex-start;
     font-family: "PixelifySans";
+    box-sizing: border-box;
+}
+
+#displayNote div {
+    width: 100%;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+#displayNote small {
+  font-size: 10px;
+  color: #aaa;
+  display: block;
+  margin-top: 4px;
+}
+
+#heartsCanvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 12px;
+    pointer-events: none;
+}
+
+#bgCanvas {
+    position: absolute;
+    top: 32px;
+    left: 0;
+    width: 100%;
+    pointer-events: none;
+    border-radius: 0 0 8px 8px;
+    z-index: 0;
+    overflow: hidden;
+}
+
+.container {
+    position: relative;
+    z-index: 1;
 }
 
 textarea {
-    resize: none;
-    height: 17px;
-    border: none;
-    outline: none;
-    border-radius: 12px;
-    padding: 10px;
-    margin: 0;
-    background: #3e3e41;
-    color: white;
-    -webkit-app-region: no-drag;
-    font-family: "PixelifySans";
+  resize: none;
+  height: 17px;
+  border: none;
+  outline: none;
+  border-radius: 12px;
+  padding: 10px;
+  margin: 0;
+  background: #3e3e41;
+  color: white;
+  -webkit-app-region: no-drag;
+  font-family: "PixelifySans";
+}
+
+#spotifyListeningText {
+  font-size: 11px;
+  color: #aaa;
+  text-align: center;
+  width: 100%;
+  margin-bottom: 6px;
 }
 
 button {
-    border: none;
-    padding: 10px;
-    border-radius: 12px;
-    margin-bottom: 0px;
-    background: rgb(88, 124, 51);
-    color: white;
-    cursor: pointer;
-    -webkit-app-region: no-drag;
-    font-family: "PixelifySans";
+  border: none;
+  padding: 10px;
+  border-radius: 12px;
+  margin-bottom: 0px;
+  background: rgb(95, 163, 106);
+  color: white;
+  cursor: pointer;
+  -webkit-app-region: no-drag;
+  font-family: "PixelifySans";
 }
 
 #spotify {
-    font-size: 12px;
-    color: #aaa;
-    padding: 6px;
-    text-align: center;
-    background: transparent;
-    flex-shrink: 0;
+  font-size: 12px;
+  color: #aaa;
+  padding: 6px;
+  text-align: center;
+  background: transparent;
+  flex-shrink: 0;
 }
 
 #noteBox {
     position: relative;
-    height: 80px;
+    min-height: 80px;
+    height: auto;
     background: #3e3e41;
     border-radius: 12px;
     padding: 12px;
+    padding-right: 60px;
     display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
+    align-items: stretch;
+    justify-content: flex-start;
+    box-sizing: border-box;
 }
 
 #pet {
     position: absolute;
-    top: 6px;
+    bottom: 6px;
     right: 6px;
     width: 50px;
     cursor: pointer;
-    transition: transform 0.2s ease;
     transition: transform 0.1s ease;
 }
 
 ::placeholder {
-    font-family: "PixelifySans";
+  font-family: "PixelifySans";
 }
 
 #spotify,
 #mySpotify,
 #partnerSpotify {
-    font-family: "PixelifySans";
-    font-size: 12px;
-    color: #aaa;
-    letter-spacing: 0.3px;
-    text-align: center;
+  font-family: "PixelifySans";
+  font-size: 12px;
+  color: #aaa;
+  letter-spacing: 0.3px;
+  text-align: center;
+  align-items: center;
+}
+
+#spotifyMeta {
+    display: flex;
+    justify-content: space-between;
     align-items: center;
+    width: 100%;
+}
+
+#spotifyTimestamp {
+    font-size: 10px;
+    color: #aaa;
+    font-family: "PixelifySans";
+    white-space: nowrap;
 }
 
 /* animations */
 
 #displayNote {
-    transition: all 0.25s ease;
+  transition: all 0.25s ease;
 }
 
 button:hover {
-    transform: scale(1.03);
-    box-shadow: 0 0 12px rgba(88, 124, 51, 0.6);
+  transform: scale(1.03);
+  box-shadow: 0 0 12px rgba(95, 163, 106, 0.7);
 }
 
 button {
-    transition: all 0.2s ease;
+  transition: all 0.2s ease;
 }
 
 #pet:hover {
@@ -182,157 +242,161 @@ button {
 }
 
 .note-pop {
-    animation: popIn 0.3s ease;
+  animation: popIn 0.3s ease;
 }
 
 @keyframes popIn {
+  0% {
+    transform: scale(0.95);
+    opacity: 0.6;
+  }
 
-    0% {
-        transform: scale(0.95);
-        opacity: 0.6;
-    }
-
-    100% {
-        transform: scale(1);
-        opacity: 1;
-    }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
-
 
 /* =====================
    UTILITY
    ===================== */
 .hidden {
-    display: none !important;
+  display: none !important;
 }
 
 /* =====================
    TIME BAR STATUS DOTS
    ===================== */
 .time-slot {
-    display: flex;
-    align-items: center;
-    gap: 5px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }
 
 .status-dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: #555;
-    display: inline-block;
-    transition: background 0.4s ease;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #555;
+  display: inline-block;
+  transition: background 0.4s ease;
 }
 
 .status-dot.online {
-    background: #7db84a;
-    box-shadow: 0 0 5px rgba(125, 184, 74, 0.7);
+  background: rgb(95, 163, 106);
+  box-shadow: 0 0 3px rgba(95, 163, 106, 0.7);
 }
 
 .status-dot.typing {
-    background: #f0c040;
-    box-shadow: 0 0 5px rgba(240, 192, 64, 0.7);
-    animation: pulse 0.8s infinite alternate;
+  background: #76c8d6;
+  box-shadow: 0 0 3px #76c8d6b3;
+  animation: pulse 0.8s infinite alternate;
 }
 
 @keyframes pulse {
-    from {
-        opacity: 0.5;
-        transform: scale(0.9);
-    }
+  from {
+    opacity: 0.5;
+    transform: scale(0.9);
+  }
 
-    to {
-        opacity: 1;
-        transform: scale(1.2);
-    }
+  to {
+    opacity: 1;
+    transform: scale(1.2);
+  }
 }
 
 /* =====================
    TYPING INDICATOR
    ===================== */
 #typingIndicator {
-    font-size: 11px;
-    color: #9ee2e7;
-    text-align: center;
-    margin-top: -6px;
-    animation: pulse 0.8s infinite alternate;
+  font-size: 11px;
+  color: #9ee2e7;
+  text-align: center;
+  margin-top: -6px;
+  animation: pulse 0.8s infinite alternate;
 }
 
 /* =====================
    NOTE FADE ANIMATION
    ===================== */
 .note-fade-in {
-    animation: noteFadeIn 0.35s ease forwards;
+  animation: noteFadeIn 0.35s ease forwards;
 }
 
 @keyframes noteFadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(4px);
-    }
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
 
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* =====================
    SPOTIFY CARD
    ===================== */
 #spotifyCard {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    background: #2a2a2d;
-    border-radius: 12px;
-    padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
+  background: #2a2a2d;
+  border-radius: 12px;
+  padding: 8px 10px;
+  gap: 6px;
+}
+
+#spotifyCardInner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 #spotifyArtwork {
-    width: 44px;
-    height: 44px;
-    border-radius: 6px;
-    object-fit: cover;
-    flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  border-radius: 6px;
+  object-fit: cover;
+  flex-shrink: 0;
 }
 
 #spotifyInfo {
-    display: flex;
-    flex-direction: column;
-    gap: 3px;
-    flex: 1;
-    overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  flex: 1;
+  overflow: hidden;
 }
 
 #spotifySong {
-    font-size: 12px;
-    color: #fff;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+  font-size: 12px;
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 #spotifyArtist {
-    font-size: 11px;
-    color: #aaa;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+  font-size: 11px;
+  color: #aaa;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 #spotifyProgressBar {
-    width: 100%;
-    height: 3px;
-    background: #444;
-    border-radius: 2px;
-    margin-top: 3px;
+  width: 100%;
+  height: 3px;
+  background: #444;
+  border-radius: 2px;
+  margin-top: 3px;
 }
 
 #spotifyProgressFill {
-    height: 100%;
-    background: #7db84a;
-    border-radius: 2px;
-    width: 0%;
-    transition: width 1s linear;
+  height: 100%;
+  background: rgb(95, 163, 106);
+  border-radius: 2px;
+  width: 0%;
+  transition: width 1s linear;
 }
