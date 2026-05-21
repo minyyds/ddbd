@@ -8,7 +8,7 @@
 
   <body>
     <div class="window">
-      <div class="header">-.♡ check on me!</div>
+      <div class="header">signal. - min & diana</div>
       <canvas id="bgCanvas"></canvas>
 
       <div class="container">
@@ -29,13 +29,17 @@
           <img id="pet" src="" />
           <div id="displayNote">waiting for note...</div>
         </div>
+        <div id="noteHistory" class="hidden"></div>
 
         <div id="typingIndicator" class="hidden"></div>
 
-        <textarea
-          id="noteInput"
-          placeholder="write something cute..."
-        ></textarea>
+        <div id="noteInputWrapper">
+          <textarea
+            id="noteInput"
+            placeholder="write something cute..."
+          ></textarea>
+          <div id="charCount">50</div>
+        </div>
 
         <button id="saveBtn">➤&nbsp;&nbsp;send</button>
 

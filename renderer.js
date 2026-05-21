@@ -12,9 +12,6 @@ function assetPath(filename, fileUrl = false) {
   return p;
 }
 
-console.log("isPackaged:", isPackaged);
-console.log("assetPath test:", assetPath("caticon.gif"));
-
 const supabase = require("./supabase");
 const { ipcRenderer, shell } = require("electron");
 
@@ -32,6 +29,7 @@ const myStatusDot = document.getElementById("myStatusDot");
 const partnerStatusDot = document.getElementById("partnerStatusDot");
 const partnerSpotify = document.getElementById("partnerSpotify");
 document.getElementById("pet").src = assetPath("caticon.gif", true);
+let artworkColor = { r: 170, g: 170, b: 170 };
 
 const style = document.createElement("style");
 style.textContent = `@font-face {
@@ -51,15 +49,19 @@ const scopes = "user-read-currently-playing user-read-playback-state";
 // =====================
 // NAMES + IDS
 // =====================
-const MY_ID = "min";
-const PARTNER_ID = "louisa";
-const MY_NAME = "min";
-const PARTNER_NAME = "louisa";
+// const MY_ID = "min";
+// const PARTNER_ID = "diana";
+// const MY_NAME = "min";
+// const PARTNER_NAME = "diana";
 
-// const MY_ID = "louisa";
-// const PARTNER_ID = "min";
-// const MY_NAME = "louisa";
-// const PARTNER_NAME = "min";
+const MY_ID = "diana";
+const PARTNER_ID = "min";
+const MY_NAME = "diana";
+const PARTNER_NAME = "min";
+
+if (MY_ID === "diana") {
+  console.log("if you see this, never forget how much i love you <3");
+}
 
 // =====================
 // SOUNDS
@@ -81,11 +83,6 @@ function resizeCanvas() {
 }
 
 function spawnHeart() {
-  const colors = [
-    "217, 180, 74", // yellow
-    "95, 163, 106", // green
-    "122, 46, 58", // red
-  ];
   hearts.push({
     x: Math.random() * canvas.width,
     y: canvas.height + 10,
@@ -93,14 +90,13 @@ function spawnHeart() {
     speed: Math.random() * 0.3 + 0.2,
     opacity: Math.random() * 0.4 + 0.3,
     drift: (Math.random() - 0.5) * 0.3,
-    color: colors[Math.floor(Math.random() * colors.length)],
   });
 }
 
-function drawPixelHeart(x, y, size, opacity, color) {
+function drawPixelHeart(x, y, size, opacity) {
   ctx.save();
   ctx.globalAlpha = opacity;
-  ctx.fillStyle = `rgb(${color})`;
+  ctx.fillStyle = `rgb(${artworkColor.r}, ${artworkColor.g}, ${artworkColor.b})`;
   const s = size;
   const grid = [
     [0, 1, 1, 0, 1, 1, 0],
@@ -135,8 +131,7 @@ function animateHearts() {
   });
 
   hearts = hearts.filter((h) => h.opacity > 0 && h.y > -20);
-
-  hearts.forEach((h) => drawPixelHeart(h.x, h.y, h.size, h.opacity, h.color));
+  hearts.forEach((h) => drawPixelHeart(h.x, h.y, h.size, h.opacity));
 
   requestAnimationFrame(animateHearts);
 }
@@ -172,14 +167,13 @@ function spawnParticle() {
     maxOp: Math.random() * 0.5 + 0.2,
     phase: "in",
     speed: Math.random() * 0.006 + 0.004,
-    isHeart: false,
     drift: (Math.random() - 0.5) * 0.6,
     floatY: (Math.random() - 0.5) * 0.4,
   });
 }
 
 function drawSparkle(x, y, size, opacity) {
-  bgCtx.fillStyle = `rgba(170, 170, 170, ${opacity})`;
+  bgCtx.fillStyle = `rgba(${artworkColor.r}, ${artworkColor.g}, ${artworkColor.b}, ${opacity})`;
   bgCtx.fillRect(Math.round(x), Math.round(y), size, size);
   bgCtx.fillRect(Math.round(x - size), Math.round(y), size, size);
   bgCtx.fillRect(Math.round(x + size), Math.round(y), size, size);
@@ -187,29 +181,8 @@ function drawSparkle(x, y, size, opacity) {
   bgCtx.fillRect(Math.round(x), Math.round(y + size), size, size);
 }
 
-function drawBgHeart(x, y, size, opacity) {
-  bgCtx.fillStyle = `rgba(170, 170, 170, ${opacity})`;
-  const grid = [
-    [0, 1, 0, 1, 0],
-    [1, 1, 1, 1, 1],
-    [1, 1, 1, 1, 1],
-    [0, 1, 1, 1, 0],
-    [0, 0, 1, 0, 0],
-  ];
-  grid.forEach((row, ri) => {
-    row.forEach((cell, ci) => {
-      if (cell)
-        bgCtx.fillRect(
-          Math.round(x + (ci - 2) * size),
-          Math.round(y + ri * size),
-          size,
-          size,
-        );
-    });
-  });
-}
-
 resizeBgCanvas();
+
 function animateBg() {
   bgCtx.clearRect(0, 0, bgCanvas.width, bgCanvas.height);
 
@@ -223,15 +196,10 @@ function animateBg() {
     p.x += p.drift;
     p.y += p.floatY;
 
-    // clamp to canvas bounds
     if (p.x < 0 || p.x > bgCanvas.width) p.drift *= -1;
     if (p.y < 0 || p.y > bgCanvas.height) p.floatY *= -1;
 
-    if (p.isHeart) {
-      drawBgHeart(p.x, p.y, p.size, p.opacity);
-    } else {
-      drawSparkle(p.x, p.y, p.size, p.opacity);
-    }
+    drawSparkle(p.x, p.y, p.size, p.opacity);
   });
 
   particles = particles.filter((p) => p.opacity > 0);
@@ -309,6 +277,10 @@ async function exchangeCodeForToken(code) {
   if (data.access_token) {
     localStorage.setItem("spotify_token", data.access_token);
     localStorage.setItem("spotify_refresh_token", data.refresh_token);
+    ipcRenderer.send("save-tokens", {
+      token: data.access_token,
+      refresh: data.refresh_token,
+    });
     hideLoginButton();
   }
 }
@@ -330,12 +302,31 @@ async function refreshAccessToken() {
   const data = await res.json();
   if (data.access_token) {
     localStorage.setItem("spotify_token", data.access_token);
+    if (data.refresh_token) {
+      localStorage.setItem("spotify_refresh_token", data.refresh_token);
+    }
+    ipcRenderer.send("save-tokens", {
+      token: data.access_token,
+      refresh:
+        data.refresh_token || localStorage.getItem("spotify_refresh_token"),
+    });
+  } else {
+    localStorage.removeItem("spotify_token");
+    localStorage.removeItem("spotify_refresh_token");
+    ipcRenderer.send("clear-tokens");
+    spotifyLoginBtn.classList.remove("hidden");
   }
 }
 
-// IPC — receive code from main.js after Spotify redirect
 ipcRenderer.on("spotify-code", (event, code) => {
   exchangeCodeForToken(code);
+
+  ipcRenderer.on("restore-tokens", (event, { token, refresh }) => {
+    localStorage.setItem("spotify_token", token);
+    localStorage.setItem("spotify_refresh_token", refresh);
+    hideLoginButton();
+    silentReconnect();
+  });
 });
 
 // =====================
@@ -371,10 +362,47 @@ async function silentReconnect() {
 // PET CLICK
 // =====================
 const pet = document.getElementById("pet");
+let historyVisible = false;
+
 pet.addEventListener("click", () => {
   petClickSound.currentTime = 0;
   petClickSound.play();
+
+  historyVisible = !historyVisible;
+  const noteBox = document.getElementById("noteBox");
+  const history = document.getElementById("noteHistory");
+
+  if (historyVisible) {
+    noteBox.classList.add("expanded");
+    history.classList.remove("hidden");
+  } else {
+    noteBox.classList.remove("expanded");
+    history.classList.add("hidden");
+  }
 });
+
+const MAX_HISTORY = 3;
+let noteHistory = [];
+
+function addToHistory(content, time) {
+  noteHistory.unshift({ content, time });
+  if (noteHistory.length > MAX_HISTORY) noteHistory.pop();
+  renderHistory();
+}
+
+function renderHistory() {
+  const container = document.getElementById("noteHistory");
+  container.innerHTML = noteHistory
+    .map(
+      (h) => `
+      <div class="history-item">
+        <div>${h.content}</div>
+        <span>${h.time}</span>
+      </div>
+    `,
+    )
+    .join("");
+}
 
 // =====================
 // NOTES
@@ -408,11 +436,20 @@ async function loadPartnerNote() {
 
   if (data) {
     displayNote.innerHTML = `
-            <div>
-                <div>${data.content}</div>
-                <small>${new Date().toLocaleTimeString()}</small>
-            </div>`;
+      <div>
+        <div>${data.content}</div>
+        <small>${new Date().toLocaleTimeString()}</small>
+      </div>`;
     animateNote(displayNote);
+    addToHistory(
+      data.content,
+      new Date().toLocaleString("en-GB", {
+        day: "2-digit",
+        month: "short",
+        hour: "2-digit",
+        minute: "2-digit",
+      }),
+    );
   }
 }
 
@@ -426,11 +463,20 @@ supabase
       if (newData.user_id !== PARTNER_ID) return;
 
       displayNote.innerHTML = `
-            <div>
-                <div>${newData.content}</div>
-                <small>${new Date().toLocaleTimeString()}</small>
-            </div>`;
+      <div>
+        <div>${newData.content}</div>
+        <small>${new Date().toLocaleTimeString()}</small>
+      </div>`;
       animateNote(displayNote);
+      addToHistory(
+        newData.content,
+        new Date().toLocaleString("en-GB", {
+          day: "2-digit",
+          month: "short",
+          hour: "2-digit",
+          minute: "2-digit",
+        }),
+      );
 
       const now = Date.now();
       if (now - lastReceiveTime > 1000) {
@@ -457,6 +503,29 @@ noteInput.addEventListener("input", () => {
   setMyStatus("typing");
   clearTimeout(typingTimer);
   typingTimer = setTimeout(() => setMyStatus("online"), 2000);
+});
+
+const CHAR_LIMIT = 50;
+const charCount = document.getElementById("charCount");
+
+noteInput.addEventListener("input", () => {
+  const remaining = CHAR_LIMIT - noteInput.value.length;
+  charCount.textContent = remaining;
+  charCount.style.color = "";
+
+  charCount.classList.remove("warning", "over");
+  if (remaining < 0) {
+    charCount.classList.add("over");
+  } else if (remaining <= 10) {
+    charCount.classList.add("warning");
+  } else {
+    charCount.style.color = "#1b1b1b";
+  }
+
+  if (noteInput.value.length > CHAR_LIMIT) {
+    noteInput.value = noteInput.value.slice(0, CHAR_LIMIT);
+    charCount.textContent = 0;
+  }
 });
 
 setMyStatus("online");
@@ -521,9 +590,7 @@ async function updateSpotify() {
 
   const res = await fetch(
     "https://api.spotify.com/v1/me/player/currently-playing",
-    {
-      headers: { Authorization: `Bearer ${token}` },
-    },
+    { headers: { Authorization: `Bearer ${token}` } },
   );
 
   if (res.status === 401) {
@@ -540,25 +607,22 @@ async function updateSpotify() {
   const artist = data.item.artists[0].name;
   const artwork = data.item.album.images[0]?.url ?? "";
 
-  document.getElementById("mySpotify").innerText = `you: ♫ ${song} - ${artist}`;
+  document.getElementById("mySpotify").innerText = ` ♫ .- ${song} - ${artist}`;
 
-  const { error, data: upsertData } = await supabase
-    .from("spotify_status")
-    .upsert({
-      user_id: MY_ID,
-      song,
-      artist,
-      artwork,
-      progress_ms: data.progress_ms,
-      duration_ms: data.item.duration_ms,
-      updated_at: new Date().toISOString(),
-    });
+  await supabase.from("spotify_status").upsert({
+    user_id: MY_ID,
+    song,
+    artist,
+    artwork,
+    progress_ms: data.progress_ms,
+    duration_ms: data.item.duration_ms,
+    updated_at: new Date().toISOString(),
+  });
 }
 
 // =====================
-// SPOTIFY — show PARTNER's song as artwork card
+// HELPERS
 // =====================
-
 function formatMs(ms) {
   const totalSec = Math.floor(ms / 1000);
   const min = Math.floor(totalSec / 60);
@@ -598,24 +662,120 @@ function getDominantColor(imageUrl, callback) {
   };
 }
 
+// =====================
+// MARQUEE
+// =====================
+let marqueeTimer = null;
+
+function startMarquee(el, text) {
+  if (marqueeTimer) {
+    cancelAnimationFrame(marqueeTimer);
+    marqueeTimer = null;
+  }
+
+  el.innerHTML = `<span>${text}</span>`;
+  const span = el.querySelector("span");
+
+  setTimeout(() => {
+    const containerWidth = el.clientWidth;
+    const textWidth = span.scrollWidth;
+
+    if (textWidth <= containerWidth) return;
+
+    const gap = containerWidth;
+    span.textContent = `${text}${"\u00A0".repeat(Math.ceil(gap / 7))}${text}`;
+
+    const halfWidth = span.scrollWidth / 2;
+    const speed = 10;
+    let pos = 0;
+    let pauseUntil = null;
+
+    function tick(timestamp) {
+      if (pauseUntil) {
+        if (timestamp < pauseUntil) {
+          marqueeTimer = requestAnimationFrame(tick);
+          return;
+        }
+        pauseUntil = null;
+      }
+
+      pos += speed / 60;
+
+      if (pos >= halfWidth) {
+        pos = 0;
+        span.style.transform = `translateX(0px)`;
+        pauseUntil = timestamp + 5000;
+        marqueeTimer = requestAnimationFrame(tick);
+        return;
+      }
+
+      span.style.transform = `translateX(-${pos}px)`;
+      marqueeTimer = requestAnimationFrame(tick);
+    }
+
+    marqueeTimer = requestAnimationFrame(tick);
+  }, 150);
+}
+
+// =====================
+// SMOOTH PROGRESS BAR
+// =====================
+let progressState = {
+  progress_ms: 0,
+  duration_ms: 0,
+  lastUpdate: null,
+  running: false,
+};
+
+function startProgressTick() {
+  if (progressState.running) return;
+  progressState.running = true;
+
+  setInterval(() => {
+    if (!progressState.duration_ms) return;
+
+    const elapsed = Date.now() - progressState.lastUpdate;
+    const current = Math.min(
+      progressState.progress_ms + elapsed,
+      progressState.duration_ms,
+    );
+    const pct = (current / progressState.duration_ms) * 100;
+
+    spotifyFill.style.width = pct + "%";
+    document.getElementById("spotifyTimestamp").textContent =
+      `${formatMs(current)} / ${formatMs(progressState.duration_ms)}`;
+  }, 1000);
+}
+
+// =====================
+// PARTNER SPOTIFY CARD
+// =====================
 function updatePartnerCard(song, artist, artwork, progress_ms, duration_ms) {
   spotifyArtwork.src = artwork ?? "";
-  spotifySong.textContent = song;
   spotifyArtist.textContent = artist;
   document.getElementById("spotifyListeningText").textContent =
     `${PARTNER_NAME} is listening to:`;
-  document.getElementById("spotifyTimestamp").textContent =
-    `${formatMs(progress_ms)} / ${formatMs(duration_ms)}`;
   spotifyCard.classList.remove("hidden");
   partnerSpotify.classList.add("hidden");
 
-  const pct = duration_ms > 0 ? (progress_ms / duration_ms) * 100 : 0;
-  spotifyFill.style.width = pct + "%";
+  startMarquee(spotifySong, song);
+
+  progressState.progress_ms = progress_ms;
+  progressState.duration_ms = duration_ms;
+  progressState.lastUpdate = Date.now();
+  startProgressTick();
 
   getDominantColor(artwork, (r, g, b) => {
     const color = `rgb(${r}, ${g}, ${b})`;
-    document.getElementById("saveBtn").style.background = color;
+    const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+    const textColor = brightness > 128 ? "#1b1b1b" : "white";
+
+    const btn = document.getElementById("saveBtn");
+    btn.style.background = color;
+    btn.style.color = textColor;
+    btn.style.boxShadow = `0 0 12px rgba(${r}, ${g}, ${b}, 0.6)`;
     spotifyFill.style.background = color;
+    artworkColor = { r, g, b };
   });
 }
 

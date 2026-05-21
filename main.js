@@ -1,4 +1,4 @@
-const { app, BrowserWindow, Tray, Menu, protocol } = require("electron");
+const { app, BrowserWindow, Tray, Menu, ipcMain } = require("electron");
 
 const http = require("http");
 const path = require("path");
@@ -77,6 +77,13 @@ function createWindow() {
   });
 
   win.loadFile("index.html");
+  win.setAlwaysOnTop(true, "screen-saver");
+
+  win.webContents.on("did-finish-load", () => {
+    const token = store.get("spotify_token");
+    const refresh = store.get("spotify_refresh_token");
+    if (token) win.webContents.send("restore-tokens", { token, refresh });
+  });
 
   win.on("moved", () => {
     store.set("windowBounds", win.getBounds());
@@ -132,7 +139,18 @@ function startCallbackServer() {
 
   server.listen(3000, "127.0.0.1");
 }
-// =====================
+
+ipcMain.on("save-tokens", (event, { token, refresh }) => {
+  store.set("spotify_token", token);
+  store.set("spotify_refresh_token", refresh);
+});
+
+ipcMain.on("clear-tokens", () => {
+  store.delete("spotify_token");
+  store.delete("spotify_refresh_token");
+});
+
+
 // INIT
 // =====================
 app.whenReady().then(() => {
