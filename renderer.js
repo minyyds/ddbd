@@ -49,19 +49,11 @@ const scopes = "user-read-currently-playing user-read-playback-state";
 // =====================
 // NAMES + IDS
 // =====================
-// const MY_ID = "min";
-// const PARTNER_ID = "diana";
-// const MY_NAME = "min";
-// const PARTNER_NAME = "diana";
 
-const MY_ID = "diana";
-const PARTNER_ID = "min";
-const MY_NAME = "diana";
-const PARTNER_NAME = "min";
-
-if (MY_ID === "diana") {
-  console.log("if you see this, never forget how much i love you <3");
-}
+const MY_ID = "Person 1";
+const PARTNER_ID = "Person 2";
+const MY_NAME = "Person 1";
+const PARTNER_NAME = "Person 2";
 
 // =====================
 // SOUNDS
